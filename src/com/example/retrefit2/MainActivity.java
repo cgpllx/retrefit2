@@ -8,8 +8,6 @@ import java.util.concurrent.TimeUnit;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
-import retrofit.adapters.RxJavaCallAdapterFactory;
-import retrofit.converter.KGsonConverterFactory;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -17,9 +15,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.retrefit2.volleycache.DiskBasedCache;
 import com.kubeiwu.commontool.khttp.cache.disk.Utils;
+import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
 import com.kubeiwu.easyandroid.manager.cookiesmanager.PersistentCookieStore;
+import com.kubeiwu.easyandroid.retrofit.adapters.RxJavaCallAdapterFactory;
+import com.kubeiwu.easyandroid.retrofit.converter.KGsonConverterFactory;
 import com.squareup.okhttp.OkHttpClient;
 
 public class MainActivity extends Activity {

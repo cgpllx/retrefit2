@@ -13,61 +13,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package retrofit.converter;
+package com.kubeiwu.easyandroid.retrofit.converter;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-
-import retrofit.Converter;
-import retrofit.Retrofit;
-
-import com.example.retrefit2.cache1.KOkhttpCache;
-import com.example.retrefit2.volleycache.DiskBasedCache;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+
+import retrofit.Converter;
+import retrofit.Retrofit;
+import retrofit.Converter.Factory;
+import retrofit.Retrofit.Builder;
+
 /**
  * A {@linkplain Converter.Factory converter} which uses Gson for JSON.
  * <p>
  * Because Gson is so flexible in the types it supports, this converter assumes that it can handle all types. If you are mixing JSON serialization with something else (such as protocol buffers), you must {@linkplain Retrofit.Builder#addConverterFactory(Converter.Factory) add this instance} last to allow the other converters a chance to see their types.
  */
-public final class KGsonConverterFactory extends Converter.Factory {
+public final class GsonConverterFactory extends Converter.Factory {
 	/**
 	 * Create an instance using a default {@link Gson} instance for conversion. Encoding to JSON and decoding from JSON (when no charset is specified by a header) will use UTF-8.
 	 */
-	public static KGsonConverterFactory create() {
-		return create(new Gson(), null);
-	}
-
-	public static KGsonConverterFactory create(DiskBasedCache kOkhttpCache) {
-		return create(new Gson(), kOkhttpCache);
+	public static GsonConverterFactory create() {
+		return create(new Gson());
 	}
 
 	/**
 	 * Create an instance using {@code gson} for conversion. Encoding to JSON and decoding from JSON (when no charset is specified by a header) will use UTF-8.
 	 */
-	public static KGsonConverterFactory create(Gson gson, DiskBasedCache kOkhttpCache) {
-		return new KGsonConverterFactory(gson, kOkhttpCache);
+	public static GsonConverterFactory create(Gson gson) {
+		return new GsonConverterFactory(gson);
 	}
 
 	private final Gson gson;
-	private final DiskBasedCache kOkhttpCache;
 
-	private KGsonConverterFactory(Gson gson, DiskBasedCache kOkhttpCache) {
+	private GsonConverterFactory(Gson gson) {
 		if (gson == null)
 			throw new NullPointerException("gson == null");
 		this.gson = gson;
-		this.kOkhttpCache = kOkhttpCache;
 	}
 
 	@Override
 	public Converter<ResponseBody, ?> fromResponseBody(Type type, Annotation[] annotations) {
-		
 		TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-		return new KGsonResponseBodyConverter<>(adapter, kOkhttpCache);
+		return new GsonResponseBodyConverter<>(adapter);
 	}
 
 	@Override

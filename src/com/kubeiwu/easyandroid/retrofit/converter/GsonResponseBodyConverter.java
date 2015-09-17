@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package retrofit.converter;
+package com.kubeiwu.easyandroid.retrofit.converter;
 
 import com.google.gson.TypeAdapter;
 import com.squareup.okhttp.ResponseBody;

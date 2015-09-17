@@ -1,4 +1,4 @@
-package retrofit.adapters;
+package com.kubeiwu.easyandroid.retrofit.adapters;
 
 import retrofit.Response;
 

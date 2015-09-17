@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package retrofit.converter;
+package com.kubeiwu.easyandroid.retrofit.converter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -24,25 +24,25 @@ import retrofit.Converter;
 import retrofit.Utils;
 
 import com.example.retrefit2.KResult;
-import com.example.retrefit2.volleycache.Cache.Entry;
-import com.example.retrefit2.volleycache.DiskBasedCache;
 import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
+import com.kubeiwu.easyandroid.cache.volleycache.Cache;
+import com.kubeiwu.easyandroid.cache.volleycache.Cache.Entry;
+import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.ResponseBody;
 import com.squareup.okhttp.internal.Util;
 
 public final class KGsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 	private final TypeAdapter<T> adapter;
-	private final DiskBasedCache kOkhttpCache;
+	private final DiskBasedCache cache;
 
 	KGsonResponseBodyConverter(TypeAdapter<T> adapter, DiskBasedCache kOkhttpCache) {
 		this.adapter = adapter;
-		this.kOkhttpCache = kOkhttpCache;
+		this.cache = kOkhttpCache;
 	}
 
-	public DiskBasedCache getkOkhttpCache() {
-		return kOkhttpCache;
+	public Cache getCache() {
+		return cache;
 	}
 
 	@Override
@@ -58,34 +58,18 @@ public final class KGsonResponseBodyConverter<T> implements Converter<ResponseBo
 
 	public T convert(ResponseBody value, Request request) throws IOException {
 
-//		Reader reader = value.charStream();
 		String string = value.string();
-		 Reader reader = new InputStreamReader((new ByteArrayInputStream(string.getBytes())), Util.UTF_8);
-		System.out.println();
-		// JsonReader rr=new JsonReader(reader);
-		// rr.setLenient(true);
-		// Reader reader=new InputStreamReader(new ByteArrayInputStream(string.getBytes()),"UTF-8");
+		Reader reader = new InputStreamReader((new ByteArrayInputStream(string.getBytes())), Util.UTF_8);
 		try {
 			T t = adapter.fromJson(reader);
 			if (t instanceof KResult) {
 				KResult kResult = (KResult) t;
 				if (kResult != null && kResult.isSuccess()) {
-					// 这里进行保存操作
-					System.out.println("可以缓存的");
-					Entry entry = new Entry(); 
-//					String string = value.string();
-					System.out.println("string=" + string);
+					Entry entry = new Entry();
+
 					entry.data = string.getBytes("UTF-8");
-					// entry.
-					// entry.responseHeaders = request.headers();
-					// value.contentType().
 					entry.mimeType = value.contentType().toString();
-//					value
-					System.out.println("entry.mimeType=" + entry.mimeType);
-					System.out.println("entry.data=" + entry.data);
-					System.out.println("entry.data lenth=" + entry.data.length);
-					kOkhttpCache.put(request.urlString(), entry);
-					System.out.println("缓存成功");
+					cache.put(request.urlString(), entry);
 				}
 			}
 			return t;
@@ -93,4 +77,5 @@ public final class KGsonResponseBodyConverter<T> implements Converter<ResponseBo
 			Utils.closeQuietly(reader);
 		}
 	}
+
 }

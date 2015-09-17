@@ -19,11 +19,13 @@ import static retrofit.Utils.closeQuietly;
 
 import java.io.IOException;
 
-import retrofit.converter.KGsonResponseBodyConverter;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
-import com.example.retrefit2.volleycache.Cache.Entry;
+import com.kubeiwu.easyandroid.cache.volleycache.Cache;
+import com.kubeiwu.easyandroid.cache.volleycache.Cache.Entry;
+import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
+import com.kubeiwu.easyandroid.retrofit.converter.KGsonResponseBodyConverter;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Protocol;
@@ -157,10 +159,13 @@ public final class OkHttpCall<T> implements Call<T> {
 	}
 
 	private Response<T> execCacheRequest(Request request) {
-		SystemClock.sleep(10000);
 		if (responseConverter instanceof KGsonResponseBodyConverter) {
 			KGsonResponseBodyConverter<T> converter = (KGsonResponseBodyConverter<T>) responseConverter;
-			Entry entry = converter.getkOkhttpCache().get(request.urlString());// 充缓存中获取entry
+			Cache cache = converter.getCache();
+			if (cache == null) {
+				return null;
+			}
+			Entry entry = cache.get(request.urlString());// 充缓存中获取entry
 			if (entry != null && entry.data != null) {// 如果有数据就使用缓存
 				MediaType contentType = MediaType.parse(entry.mimeType);
 				byte[] bytes = entry.data;
