@@ -1,5 +1,7 @@
 package com.example.retrefit2;
 
+import com.kubeiwu.easyandroid.retrofit.core.KResult;
+
 
 /**
  * 用来解析登录的返回结果

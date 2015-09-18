@@ -1,4 +1,4 @@
-package com.example.retrefit2;
+package com.kubeiwu.easyandroid.retrofit.core;
 
 public class MvpException extends Exception {
 

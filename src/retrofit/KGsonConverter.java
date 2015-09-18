@@ -25,10 +25,10 @@ import java.nio.charset.Charset;
 
 import okio.Buffer;
 
-import com.example.retrefit2.KResult;
 import com.google.gson.TypeAdapter;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache;
 import com.kubeiwu.easyandroid.cache.volleycache.Cache.Entry;
+import com.kubeiwu.easyandroid.retrofit.core.KResult;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
