@@ -3,7 +3,7 @@ package com.example.retrefit2;
 import java.util.List;
 
 import retrofit.Call;
-import retrofit.OkHttpCall.CacheMode;
+import retrofit.KOkHttpCall.CacheMode;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import rx.Observable;

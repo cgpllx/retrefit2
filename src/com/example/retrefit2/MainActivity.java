@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import retrofit.Callback;
+import retrofit.KGsonConverterFactory;
+import retrofit.KRetrofit;
 import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -18,8 +20,6 @@ import android.widget.TextView;
 import com.kubeiwu.commontool.khttp.cache.disk.Utils;
 import com.kubeiwu.easyandroid.cache.volleycache.DiskBasedCache;
 import com.kubeiwu.easyandroid.manager.cookiesmanager.PersistentCookieStore;
-import com.kubeiwu.easyandroid.retrofit.adapters.RxJavaCallAdapterFactory;
-import com.kubeiwu.easyandroid.retrofit.converter.KGsonConverterFactory;
 import com.squareup.okhttp.OkHttpClient;
 
 public class MainActivity extends Activity {
@@ -36,13 +36,14 @@ public class MainActivity extends Activity {
 		client.setCookieHandler(new CookieManager(new PersistentCookieStore(getApplicationContext()), CookiePolicy.ACCEPT_ORIGINAL_SERVER));
 		DiskBasedCache kOkhttpCache = new DiskBasedCache(Utils.getDiskCacheDir(getApplicationContext(), "volleycache1"));
 		kOkhttpCache.initialize();
-		Retrofit retrofit = new Retrofit.Builder()//
+		KRetrofit retrofit = new KRetrofit.Builder()//
 				.client(client)//
 				.baseUrl("http://xf.qfang.com/")//
 				.addConverterFactory(KGsonConverterFactory.create(kOkhttpCache))//
 				.addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build();
 
 		final Api service = retrofit.create(Api.class);
+//		service.getCity().
 		service.login().enqueue(new Callback<String>() {
 
 			@Override
